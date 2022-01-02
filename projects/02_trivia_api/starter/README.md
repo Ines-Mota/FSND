@@ -1,52 +1,293 @@
-# Full Stack API Final Project
+# Trivia API
+
+The following document aims to provide a user's guide to the Trivia API. This API is used to play a game of trivia, you can pick categories, play with random questions and add new questions!
 
 
-## Full Stack Trivia
+# Getting Set up
 
-Udacity is invested in creating bonding experiences for its employees and students. A bunch of team members got the idea to hold trivia on a regular basis and created a webpage to manage the trivia app and play the game, but their API experience is limited and still needs to be built out.
+Before using the Trivia API there are a few steps to be taken in order to get it up and running.
+In the `\backend\flaskr`  you will find the main file for using the app:
+>`__ini__.py`
 
-That's where you come in! Help them finish the trivia app so they can start holding trivia and seeing who's the most knowledgeable of the bunch. The application must:
+In the backend folder, you will also find `models.py` -  which contains the connection details and object representation in the database of the main entities of the project (in this case the categories and questions) -,and `test_flaskr.py` where the tests for the API are run.
 
-1. Display questions - both all questions and by category. Questions should show the question, category and difficulty rating by default and can show/hide the answer.
-2. Delete questions.
-3. Add questions and require that they include question and answer text.
-4. Search for questions based on a text query string.
-5. Play the quiz game, randomizing either all questions or within a specific category.
+The frontend set up has not been change, so to get it up and running you can follow the provided instructions for this project.
+## Frontend
 
-Completing this trivia app will give you the ability to structure plan, implement, and test an API - skills essential for enabling your future applications to communicate with others.
+1.  **Installing Node and NPM**  
+    This project depends on Nodejs and Node Package Manager (NPM). Before continuing, you must download and install Node (the download includes NPM) from  [https://nodejs.com/en/download](https://nodejs.org/en/download/).
+    
+2.  **Installing project dependencies**  
+    This project uses NPM to manage software dependencies. NPM Relies on the package.json file located in the  `frontend`  directory of this repository. Open the terminal and run:
+```html
+npm install
+```
 
-## Starting and Submitting the Project
+## Backend
+### Installing Dependencies for the Backend
 
-[Fork](https://help.github.com/en/articles/fork-a-repo) the [project repository](https://github.com/udacity/FSND/blob/master/projects/02_trivia_api/starter) and [Clone](https://help.github.com/en/articles/cloning-a-repository) your forked repository to your machine. Work on the project locally and make sure to push all your changes to the remote repository before submitting the link to your repository in the Classroom.
->Once you're ready, you can submit your project on the last page.
+1.  **Python 3.7**  - Follow instructions to install the latest version of python for your platform in the  [python docs](https://docs.python.org/3/using/unix.html#getting-and-installing-the-latest-version-of-python)
+    
+2.  **PIP Dependencies**  - Once you have your virtual environment setup and running, install dependencies by navigating to the  `/backend`  directory and running:
 
-## About the Stack
+```
+pip install -r requirements.txt
+```
+This will install all of the required packages we selected within the  `requirements.txt`  file.
 
-We started the full stack application for you. It is designed with some key functional areas:
+5.  **Key Dependencies**
 
-### Backend
-The [./backend](https://github.com/udacity/FSND/blob/master/projects/02_trivia_api/starter/backend/README.md) directory contains a partially completed Flask and SQLAlchemy server. You will work primarily in `__init__.py` to define your endpoints and can reference models.py for DB and SQLAlchemy setup. These are the files you'd want to edit in the backend:
+-   [Flask](http://flask.pocoo.org/)  is a lightweight backend microservices framework. Flask is required to handle requests and responses.
+    
+-   [SQLAlchemy](https://www.sqlalchemy.org/)  is the Python SQL toolkit and ORM we'll use to handle the lightweight sqlite database.
+    
+-   [Flask-CORS](https://flask-cors.readthedocs.io/en/latest/#)  is the extension we'll use to handle cross origin requests from our frontend server.
+    
 
-1. *./backend/flaskr/`__init__.py`*
-2. *./backend/test_flaskr.py*
+### Database Setup
+
+With Postgres running, restore a database using the trivia.psql file provided. From the backend folder in Windows command line run:
+```
+> psql -U yourUsername -d triviadb -a -f trivia.psql
+```
+Do equivalent for Linux and Mac.
+
+The database name should be 'triviadb', however you should adapt the username and password for your own server and make sure those match the ones defined in models.py and test.py in order to successfully run the app.
+```
+database_name = "triviadb"
+database_path = "postgresql://{}:{}@{}/{}".format('yourUsername','yourPassword','localhost:5432', database_name)
+```
+### Running the server
+
+On Windows command line run the following commands (make sure you are in the correct directory to run the app).
+```
+>set flask_app=__init__.py
+>set flask_env=development
+>set flask_debug=true
+>flask run
+```
+Do the equivalent for linux or mac.
 
 
-### Frontend
+# Endpoints 
 
-The [./frontend](https://github.com/udacity/FSND/blob/master/projects/02_trivia_api/starter/frontend/README.md) directory contains a complete React frontend to consume the data from the Flask server. If you have prior experience building a frontend application, you should feel free to edit the endpoints as you see fit for the backend you design. If you do not have prior experience building a frontend application, you should read through the frontend code before starting and make notes regarding:
+In the table below you can find the endpoints available along with its description
 
-1. What are the end points and HTTP methods the frontend is expecting to consume?
-2. How are the requests from the frontend formatted? Are they expecting certain parameters or payloads? 
-
-Pay special attention to what data the frontend is expecting from each API response to help guide how you format your API. The places where you may change the frontend behavior, and where you should be looking for the above information, are marked with `TODO`. These are the files you'd want to edit in the frontend:
-
-1. *./frontend/src/components/QuestionView.js*
-2. *./frontend/src/components/FormView.js*
-3. *./frontend/src/components/QuizView.js*
-
-
-By making notes ahead of time, you will practice the core skill of being able to read and understand code and will have a simple plan to follow to build out the endpoints of your backend API. 
+|      Request          |Endpoint                       |Description                         |
+|----------------|-------------------------------|-----------------------------|
+|GET			|`/categories`            |Gets all of the categories available           |
+|GET         |`/questions`            |      Requests a list of questions  |
+|DELETE        |`/questions/<int:question_id>`|Deletes existing question|
+|POST      |`/questions`|Adds new question|
+|POST      |`/search`|Finds question from given search term|
+|GET      |`/categories/<int:cat_id>/questions`|Gets questions from a given category|
+|POST      |`/quizzes`|Returns questions from a chosen category or randomly to play the quiz|
 
 
+# Payloads
 
->View the [README within ./frontend for more details.](./frontend/README.md)
+Bellow are shown the expected payloads from the previously presented requests.
+
+```html
+GET - http://localhost:5000/categories
+```
+```html
+#Returns
+
+{
+"categories": {
+	"1": "Science",
+	"2": "Art",
+	"3": "Geography",
+	"4": "History",
+	"5": "Entertainment",
+	"6": "Sports"
+},
+"success": true
+}
+```
+
+
+------------------
+```html
+GET - http://localhost:5000/questions?page=1
+```
+```html
+#Returns
+
+{
+	"Success": true,
+	"categories": [
+		"Science",
+		"Art",
+		"Geography",
+		"History",
+		"Entertainment",
+		"Sports"
+		],
+"questions": [
+	{
+		"answer": "Apollo 13",
+		"category": 5,
+		"difficulty": 4,
+		"id": 2,
+		"question": "What movie earned Tom Hanks his third straight Oscar 		nomination, in 1996?"
+	}
+	],
+"totalQuestions": 29
+
+# Note: This endpoint returns a list of 10 questions per page, but in order to keep the doc simple only one is shown in the example
+```
+------
+```html
+DELETE - http://localhost:5000/questions/1
+```
+```html
+#Returns
+
+{
+"success": true
+}
+```
+---
+
+```html
+POST - http://localhost:5000/questions
+```
+```html
+#Input data
+
+{
+	question: "Who won the FIFA world cup in 2010?",
+	answer: "Spain",
+	difficulty: 1,
+	category: 6
+}
+```
+```html
+#Returns
+
+```html
+#Input data
+
+{
+	"answer": "Spain",
+	"category": 6,
+	"difficulty": 1,
+	"question": "Who won the FIFA world cup in 2010?",
+	"success": true
+}
+```
+---
+```html
+POST - http://localhost:5000/search
+```
+```html
+#Input data
+
+{
+"searchTerm": "which"
+}
+```
+```html
+#Returns
+
+{
+"questions": [
+{
+	"answer": "The Palace of Versailles",
+	"category": 3,
+	"difficulty": 3,
+	"id": 14,
+	"question": "In which royal palace would you find the Hall of Mirrors?"
+},
+{
+	"answer": "Agra",
+	"category": 3,
+	"difficulty": 2,
+	"id": 15,
+	"question": "The Taj Mahal is located in which Indian city?"
+}
+],
+	"success": true,
+	"totalQuestions": 2
+}
+```
+---
+```html
+GET - http://localhost:5000/categories/1/questions
+```
+```html
+#returns
+
+{
+	"currentCategory": "Science",
+	"questions": [
+	{
+	"answer": "The Liver",
+	"category": 1,
+	"difficulty": 4,
+	"id": 20,
+	"question": "What is the heaviest organ in the human body?"
+},
+{
+	"answer": "Alexander Fleming",
+	"category": 1,
+	"difficulty": 3,
+	"id": 21,
+	"question": "Who discovered penicillin?"
+},
+{
+	"answer": "Blood",
+	"category": 1,
+	"difficulty": 4,
+	"id": 22,
+	"question": "Hematology is a branch of medicine involving the study of what?"
+},
+{
+	"answer": "Spain",
+	"category": 1,
+	"difficulty": 1,
+	"id": 52,
+	"question": "Who won the FIFA world cup in 2010?"
+}
+],
+	"success": true,
+	"totalQuestions": 4
+}
+```
+---
+```html
+POST - http://localhost:5000/quizzes
+```
+```html
+#Input data
+
+{
+"previous_questions": [],
+"quiz_category": {"type": "click", "id": 0 }
+}
+```
+```html
+#Returns
+
+{
+	"question": {
+		"answer": "Agra",
+		"category": 3,
+		"difficulty": 2,
+		"id": 15,
+		"question": "The Taj Mahal is located in which Indian city?"
+		},
+	"success": true
+}
+```
+# Response Status Codes
+
+
+|     Status Code  |     Description                         |
+|------------------|-----------------------------------------|
+|200			   | OK - The request was successful!      |
+|400			   | Bad request - the server cannot or will not process the request due to something that is perceived to be a client error      |
+|404               |  Not Found - The requested resource could not be found.          |
+|405			   | HTTP method is not allowed      |
